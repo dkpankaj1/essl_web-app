@@ -9,34 +9,28 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckLicenseExpiration
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
+    protected $filePath = 'license.json';
     public function handle(Request $request, Closure $next): Response
     {
         $licenseData = $this->getLicenseData();
-        
         if (!$licenseData) {
             return redirect()->route('license.invalid');
         }
         $expiresAt = $licenseData['expires_at'] ?? null;
         if ($expiresAt && now()->greaterThan($expiresAt)) {
-            return redirect()->route('license.invalid');  
+            return redirect()->route('license.invalid');
         }
         return $next($request);
 
     }
     private function getLicenseData()
     {
-        $filePath = 'license.json';
 
-        if (!Storage::exists($filePath)) {
+        if (!Storage::exists($this->filePath)) {
             return null;
         }
 
-        $licenseContent = Storage::get($filePath);
+        $licenseContent = Storage::get($this->filePath);
         return json_decode($licenseContent, true);
     }
 }

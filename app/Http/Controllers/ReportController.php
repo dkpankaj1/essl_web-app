@@ -14,8 +14,14 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function create()
+    public function create(Request $request)
     {
+        $reportType = $request->input('type');
+
+        if ($reportType === "daily_report") {
+            return view('daily-report');
+        }
+
         return view('report');
     }
 
@@ -62,7 +68,7 @@ class ReportController extends Controller
                 });
 
                 $checkOut = $employee->AttendanceLogs->first(function ($log) use ($currentDate, $shiftEndTime) {
-                    return $log->type === 1 && date('Y-m-d', strtotime($log->timestamp)) === $currentDate
+                    return $log->type !== 0 && date('Y-m-d', strtotime($log->timestamp)) === $currentDate
                         && date('H:i:s', strtotime($log->timestamp)) >= $shiftEndTime;
                 });
 
@@ -77,9 +83,9 @@ class ReportController extends Controller
             $report[] = $employeeReport;
         }
         if ($request->report_type === "2") {
-            return Excel::download(new AttendanceDetailReportExport($report, $dates,$setting->company_name), 'attendance_detail_report.xlsx');
+            return Excel::download(new AttendanceDetailReportExport($report, $dates, $setting->company_name), 'attendance_detail_report.xlsx');
         }
-        return Excel::download(new AttendanceBasicReportExport($report, $dates,$setting->company_name), 'attendance_report.xlsx');
+        return Excel::download(new AttendanceBasicReportExport($report, $dates, $setting->company_name), 'attendance_report.xlsx');
     }
 
     public function generateDailyReport()
@@ -111,7 +117,7 @@ class ReportController extends Controller
             });
 
             $checkOut = $employee->AttendanceLogs->first(function ($log) use ($shiftEndTime, $today) {
-                return $log->type === 1 && date('Y-m-d', strtotime($log->timestamp)) === $today
+                return $log->type !== 0 && date('Y-m-d', strtotime($log->timestamp)) === $today
                     && date('H:i:s', strtotime($log->timestamp)) >= $shiftEndTime;
             });
 

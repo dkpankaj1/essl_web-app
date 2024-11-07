@@ -257,16 +257,6 @@ class ZKTecoService
     }
 
     /**
-     * Clear all users.
-     *
-     * @return bool
-     */
-    public function clearAllUsers(): bool
-    {
-        return $this->zk->clearUser();
-    }
-
-    /**
      * Remove a user by UID.
      *
      * @param int $uid

@@ -60,7 +60,8 @@
                     style="">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Attendance Report</h6>
-                        <a class="collapse-item" href="{{ route('report.today') }}">Daily Report</a>
+                        <a class="collapse-item" href="{{ route('report.create', ['type' => 'daily_report']) }}">Daily
+                            Report</a>
                         <a class="collapse-item" href="{{ route('report.create') }}">Custom Report</a>
                     </div>
                 </div>
