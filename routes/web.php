@@ -5,14 +5,19 @@ use App\Http\Controllers\BiometricDataController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
+use App\Http\Middleware\CheckLicenseExpiration;
+use App\Http\Middleware\CheckLicenseStatus;
 use App\Models\Setting;
+use App\Services\LicenseService;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', CheckLicenseExpiration::class]], function () {
     Route::get('/', function () {
         $setting = Setting::first();
+        $license = new LicenseService();
         return view('welcome', [
             'setting' => $setting,
+            'license' => $license->getLicenseData()
         ]);
     })->name('home');
 
@@ -33,14 +38,16 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/biometric/check-status', [BiometricDataController::class, 'checkBiometricStatus'])->name('biometric.status');
 
-    Route::get('/profile', [AuthController::class, 'changeLoginDetail'])->name('profile');
-    Route::post('/profile', [AuthController::class, 'updateLoginDetail']);
+    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+    Route::post('/profile', [AuthController::class, 'updateProfile']);
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 });
 
-Route::group(['middleware' => ['guest']], function () {
+Route::group(['middleware' => ['guest', CheckLicenseExpiration::class]], function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login', [AuthController::class, 'loginProcess']);
 });
+
+Route::middleware([CheckLicenseStatus::class])->get('/license-invalid', fn() => view('license.invalid'))->name('license.invalid');

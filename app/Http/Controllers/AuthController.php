@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -36,12 +38,24 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('login');
     }
-    public function changeLoginDetail(Request $request)
+    public function profile(Request $request)
     {
-        return view('profile');
+        return view('profile',['user' => Auth::user()]);
     }
 
-    public function updateLoginDetail(Request $request)
+    public function updateProfile(Request $request)
     {
+        $validated = $request->validateWithBag('updatePassword', [
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', Password::defaults(), 'confirmed'],
+        ]);
+
+        $request->user()->update([
+            'email' => $request->email,
+            'password' => Hash::make($validated['password']),
+        ]);
+        $notification = ['message' => 'Profile update success', 'alert-type' => 'success'];
+
+        return back()->with('status', $notification);
     }
 }

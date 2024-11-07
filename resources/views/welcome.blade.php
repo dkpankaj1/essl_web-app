@@ -2,7 +2,7 @@
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-        <a href="{{route('report.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+        <a href="{{ route('report.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
 
@@ -15,7 +15,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Device ({{$setting->machine_ip}})</div>
+                                Device ({{ $setting->machine_ip }})</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $setting->serial_no }}</div>
                         </div>
                         <div class="col-auto">
@@ -34,7 +34,8 @@
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Total Employee</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{\App\Models\Employee::count()}}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ \App\Models\Employee::count() }}
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-user fa-2x text-gray-300"></i>
@@ -51,8 +52,9 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                               Log Count</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{\App\Models\AttendanceLog::count()}}</div>
+                                Log Count</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ \App\Models\AttendanceLog::count() }}
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -88,21 +90,18 @@
             <!-- Illustrations -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Attendance MS</h6>
                 </div>
                 <div class="card-body">
                     <div class="text-center">
                         <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
                             src="img/undraw_posting_photo.svg" alt="...">
                     </div>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error placeat sint assumenda beatae
-                        quos nesciunt aliquam, reiciendis eveniet eius ut. Quibusdam nemo rem culpa maiores enim
-                        recusandae, quam quaerat illum soluta, vitae aspernatur a. Quae voluptas eum, incidunt aliquam
-                        tempora ex fugiat optio deserunt, id dicta quidem corporis minima odit dolore ullam. Sed, cumque
-                        nam. Minima iste laborum excepturi impedit quia optio possimus suscipit recusandae error
-                        dolorem, provident accusantium pariatur. Cupiditate accusamus, mollitia, placeat nam ut aut ad
-                        architecto temporibus rerum perspiciatis, minus aspernatur omnis pariatur possimus? Est nihil
-                        enim, amet hic at provident, distinctio vero molestiae possimus dolorem impedit!</p>
+                    <p>Attendance MS automates attendance tracking, supporting biometric, RFID, and QR code check-ins.
+                        It offers flexible scheduling, leave tracking, and detailed reports on attendance and
+                        absenteeism. Integrating with payroll systems, it simplifies salary calculations, enhancing
+                        productivity and ensuring efficient, accurate attendance management for organizations and
+                        institutions.</p>
 
                 </div>
             </div>
@@ -111,21 +110,20 @@
             <!-- Approach -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Licence Detail</h6>
                 </div>
                 <div class="card-body">
                     <div class="text-center">
-                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                            src="img/undraw_posting_photo.svg" alt="...">
+                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 20rem;"
+                            src="img/undraw_security_on_re_e491.svg" alt="...">
                     </div>
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error placeat sint assumenda beatae
-                        quos nesciunt aliquam, reiciendis eveniet eius ut. Quibusdam nemo rem culpa maiores enim
-                        recusandae, quam quaerat illum soluta, vitae aspernatur a. Quae voluptas eum, incidunt aliquam
-                        tempora ex fugiat optio deserunt, id dicta quidem corporis minima odit dolore ullam. Sed, cumque
-                        nam. Minima iste laborum excepturi impedit quia optio possimus suscipit recusandae error
-                        dolorem, provident accusantium pariatur. Cupiditate accusamus, mollitia, placeat nam ut aut ad
-                        architecto temporibus rerum perspiciatis, minus aspernatur omnis pariatur possimus? Est nihil
-                        enim, amet hic at provident, distinctio vero molestiae possimus dolorem impedit!</p>
+                    <ul>
+                        <li>Company Name : <b>{{ $license['company_name'] }}</b></li>
+                        <li>Company email : <b>{{ $license['company_email'] }}</b></li>
+                        <li>License Number : <b>{{ $license['license_number'] }}</b></li>
+                        <li>Expires :<b> {{ $license['expires_at'] }}</b></li>
+                    </ul>
+
                 </div>
             </div>
         </div>
