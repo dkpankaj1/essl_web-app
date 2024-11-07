@@ -32,7 +32,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('home')}}">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -51,11 +51,20 @@
 
             <!-- Nav Item - Report -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('report.create') }}">
-                    <i class="fas fa-fw fa-file-contract"></i>
-                    <span>Report</span></a>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="false" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Report</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar"
+                    style="">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Attendance Report</h6>
+                        <a class="collapse-item" href="{{ route('report.today') }}">Daily Report</a>
+                        <a class="collapse-item" href="{{ route('report.create') }}">Custom Report</a>
+                    </div>
+                </div>
             </li>
-
 
             <!-- Nav Item - Attendance Log -->
             <li class="nav-item">
@@ -78,8 +87,8 @@
                     <span>Setting</span></a>
             </li>
 
-             <!-- Nav Item - Profile -->
-             <li class="nav-item">
+            <!-- Nav Item - Profile -->
+            <li class="nav-item">
                 <a class="nav-link" href="{{ route('profile') }}">
                     <i class="fas fa-fw fa-user-lock"></i>
                     <span>Profile</span></a>

@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth', CheckLicenseExpiration::class]], function
     Route::post('/employee/{employee}/update', [EmployeeController::class, 'update'])->name('employee.update');
     Route::post('/employee/sync', [EmployeeController::class, 'syncUserData'])->name('employee.sync');
 
+    Route::get('/today-report', [ReportController::class, 'generateTodayReport'])->name('report.today');
     Route::get('/report', [ReportController::class, 'create'])->name('report.create');
     Route::post('/report', [ReportController::class, 'generateReport'])->name('report.generate');
 

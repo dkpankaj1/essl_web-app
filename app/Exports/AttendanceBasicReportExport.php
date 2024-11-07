@@ -12,11 +12,15 @@ class AttendanceBasicReportExport implements FromArray, WithHeadings, WithStyles
 {
     protected $reportData;
     protected $dates;
+    protected $companyName;
+    protected $reportDate;
 
-    public function __construct(array $reportData, array $dates)
+    public function __construct(array $reportData, array $dates, string $companyName)
     {
         $this->reportData = $reportData;
         $this->dates = $dates;
+        $this->companyName = $companyName;
+        $this->reportDate = now()->format('d M, Y'); // e.g., "07 Nov, 2024"
     }
 
     public function array(): array
@@ -27,15 +31,12 @@ class AttendanceBasicReportExport implements FromArray, WithHeadings, WithStyles
             $presentCount = 0;
             $absentCount = 0;
 
-            // Start the row with the employee's name
             $employeeRow = [$employeeReport['employee_name']];
 
-            // Add the attendance status for each day
             foreach ($this->dates as $date) {
-                $status = $employeeReport[$date]['status'] ?? 'A';  // 'A' for absent by default
+                $status = $employeeReport[$date]['status'] ?? 'A';
                 $employeeRow[] = $status;
 
-                // Increment the present/absent counters
                 if ($status === 'P') {
                     $presentCount++;
                 } else {
@@ -43,11 +44,9 @@ class AttendanceBasicReportExport implements FromArray, WithHeadings, WithStyles
                 }
             }
 
-            // Add the present and absent counts at the end of the row
             $employeeRow[] = $absentCount;
             $employeeRow[] = $presentCount;
 
-            // Add the row to the data array
             $data[] = $employeeRow;
         }
 
@@ -56,28 +55,32 @@ class AttendanceBasicReportExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        // Start the headings with "Employee Name"
-        $headings = ['Employee Name'];
-
-        // Add the date columns
-        foreach ($this->dates as $date) {
-            $headings[] = $date;
-        }
-
-        // Add the "Absent" and "Present" columns
-        $headings[] = 'Absent';
-        $headings[] = 'Present';
-
-        return $headings;
+        return [
+            [$this->companyName],                      // Company name in the first row
+            ["Report Date: " . $this->reportDate],     // Report date in the second row
+            [],                                        // Empty row for spacing
+            array_merge(['Employee Name'], $this->dates, ['Absent', 'Present']) // Main headings
+        ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        // Apply bold style to the "Employee Name" column (A)
-        $sheet->getStyle('A1:A' . $sheet->getHighestRow())->getFont()->setBold(true);
+        // Style the company name and report date
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A2')->getFont()->setItalic(true);
+        $sheet->getStyle('A1:A2')->getAlignment()->setHorizontal('center');
 
-        // Apply border style to the entire data range
-        $sheet->getStyle('A1:' . $sheet->getHighestColumn() . $sheet->getHighestRow())
+        // Merge cells for the company name and report date
+        $lastColumn = $sheet->getHighestColumn();
+        $sheet->mergeCells("A1:{$lastColumn}1");
+        $sheet->mergeCells("A2:{$lastColumn}2");
+
+        // Apply bold style to the main headers
+        $sheet->getStyle('A4:' . $sheet->getHighestColumn() . '4')->getFont()->setBold(true);
+
+        // Apply borders to the data range
+        $totalRows = count($this->reportData) + 4; // +4 to account for the headers and company rows
+        $sheet->getStyle("A4:{$lastColumn}{$totalRows}")
             ->getBorders()
             ->getAllBorders()
             ->setBorderStyle(Border::BORDER_THIN);

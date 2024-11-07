@@ -24,7 +24,7 @@
 
                         <div class="form-group">
                             <label for="current_password">Current Password</label>
-                            <input type="text" name="current_password" class="form-control" placeholder="Enter current password">
+                            <input type="password" name="current_password" class="form-control" placeholder="Enter current password">
                             @error('current_password')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
@@ -40,7 +40,7 @@
 
                         <div class="form-group">
                             <label for="punch_start_before">Confirm Password</label>
-                            <input type="number" name="password_confirmation" class="form-control" placeholder="Confirm password">
+                            <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm password">
                             @error('password_confirmation')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror

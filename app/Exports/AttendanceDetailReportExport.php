@@ -12,11 +12,15 @@ class AttendanceDetailReportExport implements FromArray, WithHeadings, WithStyle
 {
     protected $reportData;
     protected $dates;
+    protected $companyName;
+    protected $reportDate;
 
-    public function __construct(array $reportData, array $dates)
+    public function __construct(array $reportData, array $dates, string $companyName)
     {
         $this->reportData = $reportData;
         $this->dates = $dates;
+        $this->companyName = $companyName;
+        $this->reportDate = now()->format('d M, Y'); // Format as "07 Nov, 2024"
     }
 
     public function array(): array
@@ -55,7 +59,7 @@ class AttendanceDetailReportExport implements FromArray, WithHeadings, WithStyle
             $data[] = $rowCheckIn;
             $data[] = $rowCheckOut;
             $data[] = $rowStatus;
-            $data[] = []; // Blank row between employees
+            $data[] = [];
         }
 
         return $data;
@@ -63,35 +67,32 @@ class AttendanceDetailReportExport implements FromArray, WithHeadings, WithStyle
 
     public function headings(): array
     {
-        $headings = ['Employee Name', 'Type'];
-
-        foreach ($this->dates as $date) {
-            $headings[] = $date;
-        }
-
-        $headings[] = 'Total Present';
-        $headings[] = 'Total Absent';
-
-        return $headings;
+        return [
+            [$this->companyName],
+            ["Report Date: " . $this->reportDate],
+            [],
+            array_merge(['Employee Name', 'Type'], $this->dates, ['Total Present', 'Total Absent']),
+        ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        // Apply bold style to the header row
-        $sheet->getStyle('A1:Z1')->getFont()->setBold(true);
 
-        // Determine the range of data for applying borders
-        $totalRows = count($this->reportData) * 4; // 3 rows per employee + 1 blank row
+        $sheet->getStyle('A4:' . $sheet->getHighestColumn() . '4')->getFont()->setBold(true);
+
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A2')->getFont()->setItalic(true);
+        $sheet->getStyle('A1:A2')->getAlignment()->setHorizontal('center');
+
         $lastColumn = $sheet->getHighestColumn();
+        $sheet->mergeCells("A1:{$lastColumn}1");
+        $sheet->mergeCells("A2:{$lastColumn}2");
 
-        // Apply border style to the data range
-        $sheet->getStyle("A1:{$lastColumn}{$totalRows}")
+        $totalRows = count($this->reportData) * 4;
+        $sheet->getStyle("A4:{$lastColumn}{$totalRows}")
             ->getBorders()
             ->getAllBorders()
             ->setBorderStyle(Border::BORDER_THIN);
-
-        // Set bold for the first column and the "Type" column for each row
-        $sheet->getStyle("A1:A{$totalRows}")->getFont()->setBold(true);
 
         return [];
     }
