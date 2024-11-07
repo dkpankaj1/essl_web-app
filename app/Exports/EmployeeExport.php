@@ -12,7 +12,11 @@ class EmployeeExport implements FromCollection, WithHeadings
     {
         $employees = Employee::select('uid', 'userid', 'name', 'role', 'cardno')->orderBy('name', 'asc')->get();
         $employees->transform(function ($employee) {
-            $employee->role = $employee->role == 0 ? 'Employee' : $employee->role;
+            $employee->role = $employee->role == 0
+                ? 'Employee'
+                : ($employee->role == 14
+                    ? 'Admin'
+                    : 'User');
             return $employee;
         });
         return $employees;

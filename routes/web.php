@@ -5,6 +5,7 @@ use App\Http\Controllers\BiometricDataController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SystemController;
 use App\Http\Middleware\CheckLicenseExpiration;
 use App\Http\Middleware\CheckLicenseStatus;
 use App\Models\Setting;
@@ -41,6 +42,11 @@ Route::group(['middleware' => ['auth', CheckLicenseExpiration::class]], function
     Route::post('/today-report', [ReportController::class, 'generateTodayReport'])->name('report.today');
     Route::get('/report', [ReportController::class, 'create'])->name('report.create');
     Route::post('/report', [ReportController::class, 'generateReport'])->name('report.generate');
+
+    Route::get('/system', [SystemController::class, 'index'])->name('system.index');
+    Route::post('/system/clear-employee-db', [SystemController::class, 'clearEmployeeDB'])->name('system.clear-employee-db');
+    Route::post('/system/clear-attendance-db', [SystemController::class, 'clearAttendanceDB'])->name('system.clear-attendance-db');
+    Route::post('/system/optimize-clear', [SystemController::class, 'optimizeClear'])->name('system.optimize-clear');
 
     Route::get('/biometric/check-status', [BiometricDataController::class, 'checkBiometricStatus'])->name('biometric.status');
 

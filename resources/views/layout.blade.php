@@ -81,11 +81,21 @@
                     <span>Employee</span></a>
             </li>
 
-            <!-- Nav Item - Settings -->
+            <!-- Nav Item - System -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('setting') }}">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#systemSetting"
+                    aria-expanded="false" aria-controls="systemSetting">
                     <i class="fas fa-fw fa-tools"></i>
-                    <span>Setting</span></a>
+                    <span>System</span>
+                </a>
+                <div id="systemSetting" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar"
+                    style="">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">System Setting</h6>
+                        <a class="collapse-item" href="{{ route('setting') }}">Setting</a>
+                        <a class="collapse-item" href="{{ route('system.index') }}">System Setting</a>
+                    </div>
+                </div>
             </li>
 
             <!-- Nav Item - Profile -->
