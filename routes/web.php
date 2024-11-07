@@ -31,7 +31,12 @@ Route::group(['middleware' => ['auth', CheckLicenseExpiration::class]], function
     Route::get('/employee', [EmployeeController::class, 'index'])->name('employee.index');
     Route::get('/employee/{employee}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
     Route::post('/employee/{employee}/update', [EmployeeController::class, 'update'])->name('employee.update');
-    Route::post('/employee/sync', [EmployeeController::class, 'syncUserData'])->name('employee.sync');
+    Route::delete('/employee/{employee}/destroy', [EmployeeController::class, 'destroy'])->name('employee.destroy');
+
+
+    Route::post('/employee-sync', [EmployeeController::class, 'syncUserData'])->name('employee.sync');
+    Route::post('/employee-export', [EmployeeController::class, 'exportEmployee'])->name('employee.export');
+
 
     Route::post('/today-report', [ReportController::class, 'generateTodayReport'])->name('report.today');
     Route::get('/report', [ReportController::class, 'create'])->name('report.create');

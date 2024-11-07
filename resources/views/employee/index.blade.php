@@ -8,10 +8,26 @@
     <div class="card">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">Employee List</h6>
-            <div>
+            <div class="d-flex">
                 <form action="{{ route('employee.sync') }}" method="POST">
                     @csrf
-                    <button class="btn btn-success">Sync User</button>
+                    <button class="btn btn-success btn-icon-split mx-1">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-sync"></i>
+                        </span>
+                        <span class="text">Sync User</span>
+                    </button>
+                </form>
+
+                <form action="{{ route('employee.export') }}" method="POST">
+                    @csrf
+                    <button class="btn btn-info btn-icon-split mx-1">
+                        <span class="icon text-white-50">
+                            <i class="fas fa-file-excel"></i>
+                        </span>
+                        <span class="text">Export</span>
+                    </button>
+
                 </form>
             </div>
         </div>
@@ -39,6 +55,8 @@
                                 <td>
                                     <a class="btn btn-warning"
                                         href="{{ route('employee.edit', $employee->id) }}">Edit</a>
+                                    <button class="btn btn-danger deleteBtn"
+                                        data-url="{{ route('employee.destroy', $employee->id) }}">Delete</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -48,6 +66,32 @@
         </div>
         <div class="card-footer">
             {{ $employees->links() }}
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <form id="deleteForm" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -117,6 +161,13 @@
                     });
                 }
 
+            });
+        </script>
+        <script>
+            $(document).on('click', '.deleteBtn', function() {
+                const url = $(this).data('url');
+                $('#deleteForm').attr('action', url);
+                $('#deleteModal').modal('show');
             });
         </script>
     @endpush

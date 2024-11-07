@@ -43,7 +43,8 @@ class ReportController extends Controller
             'AttendanceLogs' => function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('timestamp', [$startDate, $endDate]);
             }
-        ])->get();
+        ])->orderBy('name', 'asc')->get();
+        
 
         $report = [];
         $dates = [];
@@ -88,10 +89,6 @@ class ReportController extends Controller
         return Excel::download(new AttendanceBasicReportExport($report, $dates, $setting->company_name), 'attendance_report.xlsx');
     }
 
-    public function generateDailyReport()
-    {
-
-    }
     public function generateTodayReport()
     {
         $setting = Setting::first();
@@ -104,7 +101,7 @@ class ReportController extends Controller
             'AttendanceLogs' => function ($query) use ($today) {
                 $query->whereDate('timestamp', $today);
             }
-        ])->get();
+        ])->orderBy('name', 'asc')->get();
 
         // Prepare the report data
         $report = [];

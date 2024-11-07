@@ -7,6 +7,8 @@ use App\Models\Setting;
 use App\Services\ZKTecoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Exports\EmployeeExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeeController extends Controller
 {
@@ -28,7 +30,7 @@ class EmployeeController extends Controller
 
     public function index()
     {
-        $employees = Employee::paginate(10);
+        $employees = Employee::orderBy('name', 'asc')->paginate(10);
         return view("employee.index", ['employees' => $employees]);
 
     }
@@ -95,5 +97,22 @@ class EmployeeController extends Controller
         $userListPath = public_path('data/user_data.json');
         $jsonContent = file_get_contents($userListPath);
         return json_decode($jsonContent, true);
+    }
+
+    public function exportEmployee()
+    {
+        return Excel::download(new EmployeeExport, 'employees.xlsx');
+    }
+
+    public function destroy(Employee $employee)
+    {
+        try {
+            $employee->AttendanceLogs()->delete();
+            $employee->delete();
+            $notification = ['message' => 'Employee delete success.', 'alert-type' => 'success'];
+        } catch (\Exception $e) {
+            $notification = ['message' => $e->getMessage(), 'alert-type' => 'error'];
+        }
+        return back()->with($notification);
     }
 }
