@@ -44,7 +44,7 @@ class ReportController extends Controller
                 $query->whereBetween('timestamp', [$startDate, $endDate]);
             }
         ])->orderBy('name', 'asc')->get();
-        
+
 
         $report = [];
         $dates = [];
@@ -73,7 +73,11 @@ class ReportController extends Controller
                         && date('H:i:s', strtotime($log->timestamp)) >= $shiftEndTime;
                 });
 
-                $status = $checkIn && $checkOut ? 'P' : 'A';
+                if ($setting->report_mode === 1) {
+                    $status = $checkIn && $checkOut ? 'P' : 'A';
+                } else {
+                    $status = $checkIn ? 'P' : 'A';
+                }
 
                 $employeeReport[$currentDate] = [
                     'status' => $status,
@@ -118,7 +122,11 @@ class ReportController extends Controller
                     && date('H:i:s', strtotime($log->timestamp)) >= $shiftEndTime;
             });
 
-            $status = $checkIn && $checkOut ? 'Present' : 'Absent';
+            if ($setting->report_mode === 1) {
+                $status = $checkIn && $checkOut ? 'Present' : 'Absent';
+            } else {
+                $status = $checkIn ? 'Present' : 'Absent';
+            }
 
             $report[] = [
                 'sr_no' => $srNo++,

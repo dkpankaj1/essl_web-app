@@ -30,7 +30,7 @@ class BiometricDataController extends Controller
     public function attendanceLogForm()
     {
         $setting = Setting::first();
-        
+
         if (!$setting) {
             return redirect()->back()->withErrors(['error' => 'Settings not found']);
         }
@@ -97,8 +97,21 @@ class BiometricDataController extends Controller
     }
     public function getAttendanceLogFormFile()
     {
-        $attLogPath = public_path('data/att_log.json');
+        $attLogPath = public_path('data/attendance-log.json');
         $jsonContent = file_get_contents($attLogPath);
         return json_decode($jsonContent, true);
+    }
+
+    public function clearAttendanceLog()
+    {
+        try {
+            // if ($this->zk->connect()) {
+            //     $this->zk->clearAttendanceLog();
+            // }
+            $notification = ['message' => "Log clear successfully.", 'alert-type' => 'success'];
+        } catch (\Exception $e) {
+            $notification = ['message' => $e->getMessage(), 'alert-type' => 'error'];
+        }
+        return redirect()->back()->with($notification);
     }
 }

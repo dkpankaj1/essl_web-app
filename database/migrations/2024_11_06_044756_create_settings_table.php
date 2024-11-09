@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->time('end_time');
             $table->integer('punch_end_after')->default(60);
             $table->dateTime('last_log')->nullable();
+            $table->tinyInteger('report_mode')->default(1);
             $table->timestamps();
         });
     }

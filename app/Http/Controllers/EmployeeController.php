@@ -94,7 +94,7 @@ class EmployeeController extends Controller
 
     protected function getUserDataFromFile()
     {
-        $userListPath = public_path('data/user_data.json');
+        $userListPath = public_path('data/user_sync.json');
         $jsonContent = file_get_contents($userListPath);
         return json_decode($jsonContent, true);
     }

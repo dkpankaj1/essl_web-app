@@ -58,9 +58,58 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Optimize Section -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card mb-4 py-3 border-left-danger">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">Clear Attendance Log From Device
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-danger px-4" data-toggle="modal"
+                                        data-target="#confirmDeleteModal">
+                                        Run
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
+
+    <!-- Confirmation Form -->
+    <form id="confirmDeleteForm" action="{{ route('biometric.clear-log') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
+        aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Action</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to clear the biometric log? This action cannot be undone.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Bootstrap Modal -->
     <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
@@ -107,6 +156,12 @@
     </div>
 
     @push('page-js')
+        <script>
+            document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+                document.getElementById('confirmDeleteForm').submit();
+            });
+        </script>
+
         <script>
             let action = '';
             let infoModal = new bootstrap.Modal(document.getElementById('infoModal'));

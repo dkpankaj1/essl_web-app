@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Setting;
 use App\Services\ZKTecoService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class SettingController extends Controller
 {
@@ -22,8 +23,9 @@ class SettingController extends Controller
             "punch_start_before" => ['required'],
             "end_time" => ['required'],
             "punch_end_after" => ['required'],
+            'report_mode' => ['required', Rule::in([0, 1])]
         ]);
-        
+
         try {
 
             $setting = Setting::first();
@@ -37,6 +39,7 @@ class SettingController extends Controller
                 "punch_start_before" => $request->punch_start_before,
                 "end_time" => $request->end_time,
                 "punch_end_after" => $request->punch_end_after,
+                "report_mode" => $request->report_mode
             ]);
             $notification = ['message' => "Update Success.", 'alert-type' => "success"];
         } catch (\Exception $e) {

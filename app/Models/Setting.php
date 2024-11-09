@@ -15,5 +15,6 @@ class Setting extends Model
         "end_time",
         "punch_end_after",
         "last_log",
+        "report_mode",
     ];
 }

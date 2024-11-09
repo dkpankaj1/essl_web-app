@@ -59,7 +59,7 @@ class AttendanceDetailReportExport implements FromArray, WithHeadings, WithStyle
             $data[] = $rowCheckIn;
             $data[] = $rowCheckOut;
             $data[] = $rowStatus;
-            $data[] = [];
+            $data[] = [""];
         }
 
         return $data;

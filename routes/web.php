@@ -27,7 +27,7 @@ Route::group(['middleware' => ['auth', CheckLicenseExpiration::class]], function
 
     Route::get('/biometric/attendance-log', [BiometricDataController::class, 'attendanceLogForm'])->name('biometric.attendance-log');
     Route::post('/biometric/attendance-log', [BiometricDataController::class, 'attendanceLogDownload']);
-
+    Route::post('/biometric/clear-log', [BiometricDataController::class, 'clearAttendanceLog'])->name('biometric.clear-log');
 
     Route::get('/employee', [EmployeeController::class, 'index'])->name('employee.index');
     Route::get('/employee/{employee}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');

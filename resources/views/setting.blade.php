@@ -66,6 +66,21 @@
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <div class="form-group">
+                            <label for="punch_end_after">Mode</label>
+                            <select name="report_mode" class="form-control">
+                                <option value="">--select--</option>
+                                <option value="0" @if ($setting->report_mode == 0) selected @endif>Single Punch
+                                </option>
+                                <option value="1" @if ($setting->report_mode == 1) selected @endif>In-Out Punch
+                                </option>
+                            </select>
+                            @error('report_mode')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                     </div>
                     <div class="col-md-8 d-flex justify-content-center align-items-center">
                         <img src="{{ asset('img/undraw_posting_photo.svg') }}" alt="banner" class="img-fluid"
